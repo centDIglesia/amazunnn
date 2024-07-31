@@ -14,19 +14,19 @@ products.forEach((product) => {
           </div>
 
           <div class="product-name limit-text-to-2-lines">
-            Black and Gray Athletic Cotton Socks - 6 Pairs
+          ${product.name}
           </div>
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars * 10}.png">
+              src="${product.getStarURL()}">
             <div class="product-rating-count link-primary">
             ${product.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${formatcurrency(product.priceCents)}
+            ${product.getFormatteedCurrency()}
           </div>
 
           <div class="product-quantity-container">
@@ -45,7 +45,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-spacer"></div>
-
+         ${product.extraInfoHTML()}
           <div class="added-to-cart">
           
           <i class="ri-checkbox-circle-fill"></i>
@@ -64,9 +64,7 @@ products.forEach((product) => {
 
 productGrid.innerHTML = productsHTML;
 
-
-
-function updateCartQuantity() {
+export function updateCartQuantity() {
   let cartQuantity = cart.reduce(
     (total, cartItem) => total + cartItem.quantity,
     0
@@ -76,12 +74,7 @@ function updateCartQuantity() {
   cartQuantityHtml.innerHTML = `${cartQuantity}`;
 }
 
-
-
-
 function displayAddedToCart(atcButton) {
-
-
   const productContainer = atcButton.closest(".product-container");
 
   const addedToCartElement = productContainer.querySelector(".added-to-cart");
@@ -91,21 +84,14 @@ function displayAddedToCart(atcButton) {
   setTimeout(() => {
     addedToCartElement.classList.remove("added-to-cart-show");
   }, 2000);
-
- 
 }
-
-
-
 
 document.querySelectorAll(".js-add-to-cart").forEach((atcButton) => {
   atcButton.addEventListener("click", () => {
     const selectedProductID = atcButton.dataset.productId;
-    const selectedProduct = products.find(
-      (product) => product.id === selectedProductID
-    );
 
-    addToCart(selectedProduct);
+    
+    addToCart(selectedProductID);
     updateCartQuantity();
     displayAddedToCart(atcButton);
     console.log(cart);
